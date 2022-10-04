@@ -9,8 +9,10 @@ def main():
     page = requests.get(URL)
     # with open("html.txt","w") as file:
         # file.write(page.txt) 
-    keywords = {"AI", "artificial intelligence", "machine learning"}
-    search(page, keywords)
+    keywords = {"AI", "artificial intelligence", "machine learning", "Internet"} # 'Internet' keyword added for testing purposes
+    links = search(page, keywords)
+    for link in links:
+        print(link)
     
     
 def search(page, keywords):
@@ -22,9 +24,13 @@ def search(page, keywords):
     links = clean(data("a"))
     
     # Filter subject relevant to keywords
+    selected_links = []
     for link in links:
-        print(link.prettify())
-
+        print(link)
+        for keyword in keywords:
+            if re.search(fr"\b{keyword}\b", link.text, re.IGNORECASE):
+                selected_links.append(link.get('href'))
+    return selected_links
 
 def clean(links):
     # Keep only article links
